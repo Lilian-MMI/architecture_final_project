@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const usersRouter = require("./routes/user.routes");
 
 // Constants
 const PORT = 8080;
@@ -8,8 +9,7 @@ const HOST = "0.0.0.0";
 // App
 const app = express();
 app.use(express.json());
-
-require("./routes/user.routes")(app);
+app.use("/users", usersRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World From User");
