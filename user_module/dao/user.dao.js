@@ -38,3 +38,9 @@ exports.logout = () => {
     token: createToken("", 1),
   };
 };
+
+exports.validateToken = async (token) => {
+  const { id } = jwt.verify(token, secret.key);
+  const user = await User.findById(id);
+  return user;
+};

@@ -10,6 +10,11 @@ exports.login = async (body) => {
   return await userDAO.login(user);
 };
 
-exports.logout = async () => {
-  return await userDAO.logout();
+exports.logout = () => {
+  return userDAO.logout();
+};
+
+exports.validateToken = async (body) => {
+  const { token } = body;
+  return await userDAO.validateToken(token);
 };

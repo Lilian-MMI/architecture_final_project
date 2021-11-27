@@ -48,4 +48,12 @@ userRouter.get("/logout", async (req, res) => {
   }
 });
 
+userRouter.post("/validate", async (req, res) => {
+  try {
+    res.status(200).send(await userServices.validateToken(req.body));
+  } catch (err) {
+    res.status(500).send({ error: handleErrors(err) });
+  }
+});
+
 module.exports = userRouter;

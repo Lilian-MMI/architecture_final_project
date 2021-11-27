@@ -25,10 +25,9 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       validate: [isEmail, `Veuillez renseigner une addresse email valide`],
     },
-    games: [
+    quizzs: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Game",
       },
     ],
   },
