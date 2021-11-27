@@ -17,15 +17,20 @@ const createToken = (id, expiresIn = 1 * 24 * 60 * 60) => {
 
 exports.register = async (user) => {
   const userCreated = await User.create(user);
+  const userReturn = {
+    _id: userCreated._id,
+    username: userCreated.username,
+    email: userCreated.email,
+  };
 
   return {
-    user: userCreated,
+    user: userReturn,
     token: createToken(userCreated._id),
   };
 };
 
 exports.login = async (user) => {
-  const userLogged = await User.login(email, password);
+  let userLogged = await User.login(email, password);
 
   return {
     user: userLogged,
@@ -37,4 +42,10 @@ exports.logout = () => {
   return {
     token: createToken("", 1),
   };
+};
+
+exports.validateToken = async (token) => {
+  const { id } = jwt.verify(token, secret.key);
+  const user = await User.findById(id, { _id: 1 });
+  return user;
 };

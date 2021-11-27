@@ -25,10 +25,9 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       validate: [isEmail, `Veuillez renseigner une addresse email valide`],
     },
-    games: [
+    quizzs: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Game",
       },
     ],
   },
@@ -43,10 +42,18 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.statics.login = async function (email, password) {
-  const user = await this.findOne({ email });
+  const user = await this.findOne(
+    { email },
+    {
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+    }
+  );
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
+      delete user._doc.password;
       return user;
     }
   }

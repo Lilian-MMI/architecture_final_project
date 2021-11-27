@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const usersRouter = require("./routes/user.routes");
+const morgan = require("morgan");
 
 // Constants
 const PORT = 8080;
@@ -9,11 +10,8 @@ const HOST = "0.0.0.0";
 // App
 const app = express();
 app.use(express.json());
+app.use(morgan("dev"));
 app.use("/users", usersRouter);
-
-app.get("/", (req, res) => {
-  res.send("Hello World From User");
-});
 
 const dbURI =
   process.env.DB_URI ||

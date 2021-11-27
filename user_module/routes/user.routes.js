@@ -21,7 +21,8 @@ const handleErrors = (err) => {
       errors[properties.path] = properties.message;
     });
   }
-  return errors;
+
+  return Object.keys(errors).length ? errors : err.message;
 };
 
 userRouter.post("/register", async (req, res) => {
@@ -43,6 +44,14 @@ userRouter.post("/login", async (req, res) => {
 userRouter.get("/logout", async (req, res) => {
   try {
     res.status(200).send(await userServices.logout());
+  } catch (err) {
+    res.status(500).send({ error: handleErrors(err) });
+  }
+});
+
+userRouter.post("/validate", async (req, res) => {
+  try {
+    res.status(200).send(await userServices.validateToken(req.body));
   } catch (err) {
     res.status(500).send({ error: handleErrors(err) });
   }
