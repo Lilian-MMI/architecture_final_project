@@ -5,7 +5,7 @@ exports.verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.body;
 
   if (!token)
-    res.status(403).send({
+    return res.status(403).send({
       message: "Aucun token fourni",
     });
 
@@ -17,13 +17,13 @@ exports.verifyToken = (req: Request, res: Response, next: NextFunction) => {
         return next();
       }
 
-      res.status(403).send({
+      return res.status(403).send({
         message: "Non autorisé",
       });
     })
-    .catch(() => {
+    .catch(() =>
       res.status(403).send({
         message: "Non autorisé",
-      });
-    });
+      })
+    );
 };
