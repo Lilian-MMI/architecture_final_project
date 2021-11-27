@@ -1,4 +1,4 @@
-version: "1"
+version: "2"
 services:
   user_microservice:
     container_name: ${APP_NAME:?err}_user
