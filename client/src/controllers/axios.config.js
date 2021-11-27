@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const uriGateway = "http://localhost:4000/api/";
+const uriGateway = "http://localhost:3001/api/";
 
 let axiosApi = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "",
   headers: {
     "Content-type": "application/json",
   },

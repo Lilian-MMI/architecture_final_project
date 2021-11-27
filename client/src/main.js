@@ -9,12 +9,14 @@ import "primevue/resources/primevue.min.css";
 
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import Card from "primevue/card";
+import ToastService from "primevue/toastservice";
+import Toast from "primevue/toast";
 
 createApp(App)
   .use(router)
   .use(PrimeVue, { ripple: true })
+  .use(ToastService)
   .component("InputText", InputText)
   .component("Button", Button)
-  .component("Card", Card)
+  .component("Toast", Toast)
   .mount("#app");

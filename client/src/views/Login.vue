@@ -3,6 +3,7 @@
     <!-- FORM LOGIN -->
     <div class="card">
       <div class="card-header">
+        <img src="@/assets/logo.png" alt="logo" class="logo-badge" />
         <h1>Connexion</h1>
         <p>Veuillez entrer vos identifiants</p>
       </div>
@@ -56,19 +57,18 @@
     <!-- BACK BUTTON -->
     <div class="btn-wrapper">
       <p>Pas encore de compte ?</p>
-      <Button
-        label="Inscrivez-vous."
-        type="submit"
-        style="width: 100%; margin-top: 1rem"
-        :loading="isLoading"
-      />
+      <router-link to="/register" class="link">Inscrivez-vous</router-link>
     </div>
   </div>
+
+  <!-- RESPONSE SERVER -->
+  <Toast />
 </template>
 
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
+import apiController from "@/controllers/api.controller";
 
 export default {
   setup() {
@@ -93,7 +93,37 @@ export default {
       },
     };
   },
-  methods: {},
+  methods: {
+    async handleLogin() {
+      /* CHECK VALIDATION ON FORM */
+      const isFormCorrect = await this.v$.$validate();
+      if (!isFormCorrect) return;
+
+      /* SUCCESS VALIDATION */
+      this.isLoading = true;
+      const body = {
+        username: this.username,
+        password: this.password,
+      };
+
+      await apiController
+        .login(body)
+        .then(() => {
+          this.$router.push({ name: "Dashboard" });
+        })
+        .catch(({ response }) => {
+          this.$toast.removeAllGroups();
+          this.$toast.add({
+            severity: "error",
+            summary: "Réponse du server",
+            detail: `${response.data.message}`,
+            life: 3000,
+          });
+        });
+
+      this.isLoading = false;
+    },
+  },
 };
 </script>
 
@@ -125,6 +155,10 @@ form {
   margin-top: 2rem;
 }
 
+.form-control {
+  text-align: end;
+}
+
 .form-control:not(:last-of-type) {
   margin-bottom: 1rem;
 }
@@ -140,6 +174,28 @@ h1 {
 }
 
 .btn-wrapper {
+  margin-top: 2rem;
   display: flex;
+}
+
+.btn-wrapper > p {
+  margin: 0;
+  color: #495057;
+  font-weight: 200;
+}
+
+.btn-wrapper > .link {
+  margin-left: 0.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.btn-wrapper > .link:hover {
+  text-decoration: underline;
+}
+
+.logo-badge {
+  width: 75px;
 }
 </style>
