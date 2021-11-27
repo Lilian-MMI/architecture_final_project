@@ -5,7 +5,7 @@ exports.verifyToken = (req, res, next) => {
 
   if (!token)
     res.status(403).send({
-      message: "No token provided!",
+      message: "Aucun token fourni",
     });
 
   axios
@@ -17,12 +17,12 @@ exports.verifyToken = (req, res, next) => {
       }
 
       res.status(403).send({
-        message: "Unauthorized!",
+        message: "Non autorisé",
       });
     })
     .catch(() => {
       res.status(403).send({
-        message: "Unauthorized!",
+        message: "Non autorisé",
       });
     });
 };

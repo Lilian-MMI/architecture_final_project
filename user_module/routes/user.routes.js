@@ -21,7 +21,8 @@ const handleErrors = (err) => {
       errors[properties.path] = properties.message;
     });
   }
-  return errors;
+
+  return Object.keys(errors).length ? errors : err.message;
 };
 
 userRouter.post("/register", async (req, res) => {

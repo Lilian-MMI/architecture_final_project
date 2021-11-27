@@ -5,6 +5,9 @@ const axios = require("axios");
 exports.getAll = async (queryFilter) => {
   const { label, difficulty } = queryFilter;
 
+  if (label && !Number(difficulty))
+    throw new Error("Le difficulty doit être un nombre");
+
   let filters = {
     label: { $regex: label ?? "", $options: "i" },
   };
@@ -15,6 +18,9 @@ exports.getAll = async (queryFilter) => {
 };
 
 exports.getOne = async (id) => {
+  if (!id) throw new Error("Le paramètre id du quizz est requis");
+  if (!ObjectId.isValid(id)) throw new Error("L'id n'est pas valide");
+
   return await quizzDAO.getById(id);
 };
 
@@ -22,6 +28,8 @@ exports.getAnswer = async (body, userId) => {
   const { id, userAnswers, token } = body;
 
   if (!userAnswers) throw new Error("Aucune réponse retournée");
+
+  if (!id) throw new Error("Le id du quizz est requis");
 
   const questions = await quizzDAO
     .getQuizzQuestions(id)
@@ -31,6 +39,9 @@ exports.getAnswer = async (body, userId) => {
     throw new Error("Des réponses sont manquantes");
 
   userQuizzData = userAnswers.map((answer) => {
+    if (!answer._id) throw new Error("Le _id du de la question est manquante");
+    if (!answer.answer) throw new Error("Une answer est manquante");
+
     return { _id: new ObjectId(answer._id), answer: answer.answer };
   });
 
