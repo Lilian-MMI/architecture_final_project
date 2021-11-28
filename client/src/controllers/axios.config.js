@@ -3,7 +3,7 @@ import axios from "axios";
 const uriGateway = "http://localhost:3001/api/";
 
 let axiosApi = axios.create({
-  baseURL: "",
+  baseURL: uriGateway,
   headers: {
     "Content-type": "application/json",
   },

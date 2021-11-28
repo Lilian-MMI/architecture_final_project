@@ -1,13 +1,13 @@
 <template>
-  <div class="wrapper-login">
-    <!-- FORM LOGIN -->
+  <div class="wrapper-register">
+    <!-- FORM REGISTER -->
     <div class="card">
       <div class="card-header">
         <img src="@/assets/logo.png" alt="logo" class="logo-badge" />
-        <h1>Connexion</h1>
-        <p>Veuillez entrer vos identifiants</p>
+        <h1>Inscription</h1>
+        <p>Création de votre compte</p>
       </div>
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="handleRegister">
         <div class="form-control">
           <div class="p-inputgroup">
             <span class="p-inputgroup-addon">
@@ -21,6 +21,24 @@
           </div>
           <span v-if="v$.email.$error">
             <span v-for="(error, index) of v$.email.$errors" :key="index">
+              <small class="p-error">{{ error.$message }}</small>
+            </span>
+          </span>
+        </div>
+
+        <div class="form-control">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-user"></i>
+            </span>
+            <InputText
+              v-model="username"
+              :class="{ 'p-invalid': v$.username.$error }"
+              placeholder="Nom d'utilisateur"
+            />
+          </div>
+          <span v-if="v$.username.$error">
+            <span v-for="(error, index) of v$.username.$errors" :key="index">
               <small class="p-error">{{ error.$message }}</small>
             </span>
           </span>
@@ -45,8 +63,30 @@
           </span>
         </div>
 
+        <div class="form-control">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-lock"></i>
+            </span>
+            <InputText
+              v-model="confirmPassword"
+              type="confirmPassword"
+              :class="{ 'p-invalid': v$.confirmPassword.$error }"
+              placeholder="Confirmation mot de passe"
+            />
+          </div>
+          <span v-if="v$.confirmPassword.$error">
+            <span
+              v-for="(error, index) of v$.confirmPassword.$errors"
+              :key="index"
+            >
+              <small class="p-error">{{ error.$message }}</small>
+            </span>
+          </span>
+        </div>
+
         <Button
-          label="Se connecter"
+          label="S'inscrire"
           type="submit"
           style="width: 100%; margin-top: 1rem"
           :loading="isLoading"
@@ -56,8 +96,8 @@
 
     <!-- BACK BUTTON -->
     <div class="btn-wrapper">
-      <p>Pas encore de compte ?</p>
-      <router-link to="/register" class="link">Inscrivez-vous</router-link>
+      <p>Déjà un compte ?</p>
+      <router-link to="/login" class="link">Connectez-vous</router-link>
     </div>
   </div>
 
@@ -68,7 +108,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import apiController from "@/controllers/api.controller";
-import { userLogin } from "@/models/user.model";
+import { userRegister } from "@/models/user.model";
 
 export default {
   setup() {
@@ -78,14 +118,16 @@ export default {
     return {
       isLoading: false,
       email: "",
+      username: "",
       password: "",
+      confirmPassword: "",
     };
   },
   validations() {
-    return userLogin;
+    return userRegister(this.password);
   },
   methods: {
-    async handleLogin() {
+    async handleRegister() {
       /* CHECK VALIDATION ON FORM */
       const isFormCorrect = await this.v$.$validate();
       if (!isFormCorrect) return;
@@ -94,11 +136,12 @@ export default {
       this.isLoading = true;
       const body = {
         email: this.email,
+        username: this.username,
         password: this.password,
       };
 
       await apiController
-        .login(body)
+        .register(body)
         .then(() => {
           this.$router.push({ name: "Home" });
         })
@@ -119,7 +162,7 @@ export default {
 </script>
 
 <style scoped>
-.wrapper-login {
+.wrapper-register {
   display: flex;
   flex-direction: column;
   justify-content: center;
