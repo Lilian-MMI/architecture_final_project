@@ -18,6 +18,7 @@ axiosApi.interceptors.response.use(
 
   /* ERROR */
   (err) => {
+    console.log(err);
     return Promise.reject(err);
   }
 );
