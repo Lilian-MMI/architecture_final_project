@@ -107,7 +107,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import apiController from "@/controllers/api.controller";
+import userController from "@/controllers/api.controller";
 import { userRegister } from "@/models/user.model";
 
 export default {
@@ -140,7 +140,7 @@ export default {
         password: this.password,
       };
 
-      await apiController
+      await userController
         .register(body)
         .then(() => {
           this.$router.push({ name: "Home" });

@@ -43,7 +43,7 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.get("/logout", async (req, res) => {
   try {
-    res.status(200).send(await userServices.logout());
+    res.status(200).send(userServices.logout());
   } catch (err) {
     res.status(500).send({ error: handleErrors(err) });
   }
