@@ -67,7 +67,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import userController from "@/controllers/api.controller";
+import userController from "@/controllers/user.controller";
 import { userLogin } from "@/models/user.model";
 
 export default {

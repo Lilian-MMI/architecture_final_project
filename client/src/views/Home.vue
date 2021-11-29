@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import apiController from "@/controllers/api.controller";
+import gameController from "@/controllers/game.controller";
 
 export default {
   data() {
@@ -12,7 +12,7 @@ export default {
     };
   },
   created() {
-    await apiController.getQuizzs().then(({ data }) => (quizzs = data));
+    gameController.getQuizzs().then(({ data }) => (quizzs = data));
   },
   methods: {},
 };
