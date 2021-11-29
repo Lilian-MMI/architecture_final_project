@@ -1,8 +1,6 @@
 const axios = require("axios");
-const url = require("url");
 
 module.exports = (app) => {
-  // L'utilisateur veut créer un compte
   app.post("/api/users/register", function (req, res) {
     axios({
       method: "post",
@@ -10,9 +8,7 @@ module.exports = (app) => {
       data: req.body,
     })
       .then(function (reponse) {
-        console.log(reponse.data);
-
-        //JSON object to be added to cookie
+        // Cookie
         let token = {
           token: reponse.data.token,
         };
@@ -28,28 +24,16 @@ module.exports = (app) => {
           secure: process.env.NODE_ENV === "production" ? true : false,
         });
 
-        let headerPerso = {
-          "Content-Type": "text/html",
-          token: reponse.data.token,
-        };
-        res.set(headerPerso);
-        res.charset = "utf-8";
-        res.status(200);
-        //res.json(reponse.data);
-        //res.send(reponse.data);
-        res.redirect(
-          `http://localhost:3000/game.routes.accueil?_id=${reponse.data.user._id}&username=${reponse.data.user.username}&email=${reponse.data.user.email}&token${reponse.data.user.token}`
-        );
+        res.status(200).send(reponse.data);
       })
-      .catch(function ({ response }) {
+      .catch(function (erreur) {
         res.charset = "utf-8";
-        res.status(404).json({
-          error: response.data.error,
+        res.status(erreur.response.status ? erreur.response.status : 404).json({
+          error: erreur.response.data.error,
         });
       });
   });
 
-  // Valider un token
   app.post("/api/users/validate", function (req, res) {
     axios({
       method: "post",
@@ -60,15 +44,14 @@ module.exports = (app) => {
         res.charset = "utf-8";
         res.json("Token valide");
       })
-      .catch(function ({ response }) {
+      .catch(function (erreur) {
         res.charset = "utf-8";
-        res.status(404).json({
-          error: response.data.error,
+        res.status(erreur.response.status ? erreur.response.status : 404).json({
+          error: erreur.response.data.error,
         });
       });
   });
 
-  // L'utilisateur demande à s'identifier
   app.post("/api/users/login", function (req, res) {
     axios({
       method: "post",
@@ -76,9 +59,7 @@ module.exports = (app) => {
       data: req.body,
     })
       .then(function (reponse) {
-        console.log(reponse.data);
-
-        //JSON object to be added to cookie
+        // Cookie
         let token = {
           token: reponse.data.token,
         };
@@ -93,25 +74,13 @@ module.exports = (app) => {
           secure: process.env.NODE_ENV === "production" ? true : false,
         });
 
-        /*res.charset = "utf-8";
-                res.status(200)
-                    .json(reponse.data);*/
-
-        let headerPerso = {
-          "Content-Type": "text/html",
-          token: reponse.data.token,
-        };
-        res.set(headerPerso);
-        res.charset = "utf-8";
-        res.status(200);
-        res.redirect(
-          `http://localhost:3000/game.routes.accueil?_id=${reponse.data.user._id}&username=${reponse.data.user.username}&email=${reponse.data.user.email}&token${reponse.data.user.token}`
-        );
+        res.status(200).send(reponse.data);
       })
-      .catch(function ({ response }) {
+      .catch(function (erreur) {
         res.charset = "utf-8";
-        res.status(404).json({
-          error: response.data.error,
+
+        res.status(erreur.response.status ? erreur.response.status : 404).json({
+          error: erreur.response.data.error,
         });
       });
   });

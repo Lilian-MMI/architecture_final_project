@@ -825,7 +825,7 @@ h1 {
 }
 
 .quizzs-wrapper {
-  margin-top: 2rem;
+  margin: 2rem 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);

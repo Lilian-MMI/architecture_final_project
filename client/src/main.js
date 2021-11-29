@@ -14,7 +14,7 @@ import Toast from "primevue/toast";
 import Toolbar from "primevue/toolbar";
 import Dropdown from "primevue/dropdown";
 import Skeleton from "primevue/skeleton";
-import Checkbox from "primevue/checkbox";
+import RadioButton from "primevue/radiobutton";
 
 createApp(App)
   .use(router)
@@ -26,5 +26,5 @@ createApp(App)
   .component("Toolbar", Toolbar)
   .component("Dropdown", Dropdown)
   .component("Skeleton", Skeleton)
-  .component("Checkbox", Checkbox)
+  .component("RadioButton", RadioButton)
   .mount("#app");
