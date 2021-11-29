@@ -12,7 +12,7 @@ export default {
     };
   },
   created() {
-    await apiController.getQuizzs().then(({ data }) => (quizzs = data));
+    //await apiController.getQuizzs().then(({ data }) => (quizzs = data));
   },
   methods: {},
 };
