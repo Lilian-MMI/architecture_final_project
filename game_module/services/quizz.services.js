@@ -21,7 +21,7 @@ exports.getOne = async (id) => {
   if (!id) throw new Error("Le paramètre id du quizz est requis");
   if (!ObjectId.isValid(id)) throw new Error("L'id n'est pas valide");
 
-  return await quizzDAO.getById(id);
+  return await quizzDAO.getQuizzQuestions(id);
 };
 
 exports.getAnswer = async (body, userId) => {

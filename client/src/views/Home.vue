@@ -1,23 +1,31 @@
 <template>
-  <div>home</div>
+  <Header />
+  <router-view v-slot="{ Component }">
+    <transition name="slide">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
 
 <script>
-import gameController from "@/controllers/game.controller";
-
+import Header from "../components/Header.vue";
 export default {
-  data() {
-    return {
-      quizzs: [],
-    };
+  components: {
+    Header,
   },
-  created() {
-
-    gameController.getQuizzs().then(({ data }) => (quizzs = data));
-
-  },
-  methods: {},
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+</style>

@@ -7,6 +7,23 @@
 
 * {
   box-sizing: border-box;
+  /* SCROLLBAR */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+/* SCROLLBAR */
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 13px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  color: rgba(0, 0, 0, 0.3);
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 0 10px;
 }
 
 html {

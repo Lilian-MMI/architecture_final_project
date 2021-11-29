@@ -102,13 +102,16 @@ export default {
         .then(() => {
           this.$router.push({ name: "Home" });
         })
-        .catch((error) => {
+        .catch(({ response }) => {
           this.$toast.removeAllGroups();
-          this.$toast.add({
-            severity: "error",
-            summary: "Réponse du server",
-            detail: `${error.message}`,
-            life: 3000,
+
+          Object.entries(response?.data?.error).forEach((key, value) => {
+            this.$toast.add({
+              severity: "error",
+              summary: "Réponse du server",
+              detail: `${key}: ${value}`,
+              life: 3000,
+            });
           });
         });
 

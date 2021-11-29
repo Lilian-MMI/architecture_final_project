@@ -16,6 +16,25 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    redirect: "/quizzs",
+    children: [
+      {
+        path: "/quizzs",
+        name: "Quizzs",
+        component: () => import("../views/Quizzs.vue"),
+      },
+      {
+        path: "/quizzs/:id",
+        params: { id: "id" },
+        name: "Quizz",
+        component: () => import("../views/Quizz.vue"),
+      },
+      {
+        path: "/account",
+        name: "Account",
+        component: () => import("../views/Account.vue"),
+      },
+    ],
   },
 ];
 

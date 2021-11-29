@@ -1,8 +1,8 @@
 import axiosApi from "./axios.config";
 
 export default {
-  async getQuizzs() {
-    return await axiosApi.get("games");
+  async getQuizzs(params) {
+    return await axiosApi.get("games", { params });
   },
 
   async getQuizz(gameId) {
