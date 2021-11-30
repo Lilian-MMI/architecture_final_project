@@ -17,9 +17,17 @@ exports.getById = async (id) => {
   };
 };
 
-exports.getQuizzQuestions = async (id) => {
+exports.getQuizzQuestions = async (id, withAnswer) => {
   const quizz = await Quizz.findById(id);
-  const questions = await Question.find({ _id: { $in: quizz.questions } });
+
+  let questions;
+
+  if (!withAnswer)
+    questions = await Question.find(
+      { _id: { $in: quizz.questions } },
+      { answer: withAnswer }
+    );
+  else questions = await Question.find({ _id: { $in: quizz.questions } });
 
   return {
     questions,

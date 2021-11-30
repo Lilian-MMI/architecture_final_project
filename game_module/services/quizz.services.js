@@ -17,22 +17,21 @@ exports.getAll = async (queryFilter) => {
   return await quizzDAO.getAll(filters);
 };
 
-exports.getOne = async (id) => {
+exports.getOne = async (id, withAnswer = 0) => {
   if (!id) throw new Error("Le paramètre id du quizz est requis");
   if (!ObjectId.isValid(id)) throw new Error("L'id n'est pas valide");
 
-  return await quizzDAO.getQuizzQuestions(id);
+  return await quizzDAO.getQuizzQuestions(id, Number(withAnswer));
 };
 
 exports.getAnswer = async (body, userId) => {
   const { id, userAnswers, token } = body;
 
   if (!userAnswers) throw new Error("Aucune réponse retournée");
-
   if (!id) throw new Error("Le id du quizz est requis");
 
   const questions = await quizzDAO
-    .getQuizzQuestions(id)
+    .getQuizzQuestions(id, 1)
     .then(({ questions }) => questions);
 
   if (userAnswers.length !== questions.length)
@@ -64,12 +63,14 @@ exports.getAnswer = async (body, userId) => {
     badAnswers: badAnswers.map((badAnswers) => badAnswers._id),
   };
 
-  await axios.post("http://172.20.0.4:8082/scores/", {
-    ...results,
-    quizzId: id,
-    userId,
-    token,
-  });
+  const scoreId = await axios
+    .post("http://172.20.0.4:8082/scores/", {
+      ...results,
+      quizzId: id,
+      userId,
+      token,
+    })
+    .then((res) => res.data.id);
 
-  return results;
+  return { ...results, scoreId };
 };

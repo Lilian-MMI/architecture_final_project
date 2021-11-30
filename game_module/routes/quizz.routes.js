@@ -24,17 +24,21 @@ quizzRouter.post("/", verifyToken, async (req, res) => {
   }
 });
 
-quizzRouter.post("/:quizzId", verifyToken, async (req, res) => {
+quizzRouter.post("/answer", verifyToken, async (req, res) => {
   try {
-    res.status(200).send(await quizzServices.getOne(req.params.quizzId));
+    res.status(200).send(await quizzServices.getAnswer(req.body, req.userId));
   } catch (err) {
     res.status(500).send({ error: handleErrors(err) });
   }
 });
 
-quizzRouter.post("/answer", verifyToken, async (req, res) => {
+quizzRouter.post("/:quizzId", verifyToken, async (req, res) => {
   try {
-    res.status(200).send(await quizzServices.getAnswer(req.body, req.userId));
+    res
+      .status(200)
+      .send(
+        await quizzServices.getOne(req.params.quizzId, req.query.withReponse)
+      );
   } catch (err) {
     res.status(500).send({ error: handleErrors(err) });
   }

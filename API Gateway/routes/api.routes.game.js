@@ -36,9 +36,11 @@ module.exports = (app) => {
     }
 
     let id = req.params.gameId;
-    console.log(id);
+    const params = new url.URLSearchParams({ ...req.query });
     axios
-      .post(`http://0.0.0.0:8081/quizz/${id}`, { token: req.cookies.jwt })
+      .post(`http://0.0.0.0:8081/quizz/${id}?${params}`, {
+        token: req.cookies.jwt,
+      })
       .then(function (reponse) {
         res.status(200).send(reponse.data);
       })
@@ -57,9 +59,11 @@ module.exports = (app) => {
         .status(403)
         .json({ error: { authentification: "Aucun token fourni" } });
     }
-
     axios
-      .post(`http://localhost:8081/quizz/answer`, { token: req.cookies.jwt })
+      .post(`http://localhost:8081/quizz/answer`, {
+        token: req.cookies.jwt,
+        ...req.body,
+      })
       .then(function (reponse) {
         res.status(200).send(reponse.data);
       })

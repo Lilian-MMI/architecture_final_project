@@ -71,9 +71,7 @@
               <Skeleton />
             </p>
             <div class="quizzs-item-actions">
-              <router-link to="/">
-                <Skeleton height="45.556px"></Skeleton>
-              </router-link>
+              <Skeleton height="45.556px"></Skeleton>
             </div>
           </div>
         </div>
@@ -98,7 +96,6 @@ export default {
       ],
       selectedDifficulty: null,
       isLoading: false,
-      isLoadingInput: false,
       quizzs: [],
     };
   },

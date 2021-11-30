@@ -14,7 +14,7 @@ scoresRouter.post("/", verifyToken, async (req, res) => {
   }
 });
 
-scoresRouter.get("/", verifyToken, async (req, res) => {
+scoresRouter.post("/history", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await scoresService.getScores(req["userId"]));
   } catch (error) {
@@ -22,7 +22,7 @@ scoresRouter.get("/", verifyToken, async (req, res) => {
   }
 });
 
-scoresRouter.get("/:scoreId", verifyToken, async (req, res) => {
+scoresRouter.post("/:scoreId", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await scoresService.getScore(req.params.scoreId));
   } catch (error) {
