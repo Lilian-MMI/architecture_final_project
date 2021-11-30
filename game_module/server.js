@@ -20,11 +20,11 @@ const dbURI =
   process.env.DB_URI ||
   "mongodb+srv://tp_final_username:tp_final_password@cluster.rg1v5.mongodb.net/cluster?retryWrites=true&w=majority";
 
-fixtures
+/* fixtures
   .connect(dbURI)
   .then(() => fixtures.unload())
   .then(() => fixtures.load())
-  .then(() => fixtures.disconnect());
+  .then(() => fixtures.disconnect()); */
 
 mongoose
   .connect(dbURI, {

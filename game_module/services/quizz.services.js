@@ -5,7 +5,7 @@ const axios = require("axios");
 exports.getAll = async (queryFilter) => {
   const { label, difficulty } = queryFilter;
 
-  if (label && !Number(difficulty))
+  if (difficulty && !Number(difficulty))
     throw new Error("Le difficulty doit être un nombre");
 
   let filters = {
@@ -60,8 +60,8 @@ exports.getAnswer = async (body, userId) => {
   });
 
   const results = {
-    goodAnswers,
-    badAnswers,
+    goodAnswers: goodAnswers.map((goodAnswer) => goodAnswer._id),
+    badAnswers: badAnswers.map((badAnswers) => badAnswers._id),
   };
 
   await axios.post("http://172.20.0.4:8082/scores/", {

@@ -11,12 +11,17 @@ export class ScoresService {
         body.goodAnswers.length + body.badAnswers.length
       }`,
     };
+
     return await this.scoreDAO.addScore(score);
   }
 
   public async getScores(
-    userId: ScoreAttributes["id"]
+    userId: ScoreAttributes["userId"]
   ): Promise<ScoreAttributes[]> {
     return await this.scoreDAO.getScores(userId);
+  }
+
+  public async getScore(id: ScoreAttributes["id"]): Promise<ScoreAttributes> {
+    return await this.scoreDAO.getScore(id);
   }
 }

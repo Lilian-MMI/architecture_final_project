@@ -20,7 +20,6 @@ quizzRouter.get("/", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await quizzServices.getAll(req.query));
   } catch (err) {
-    console.log(err);
     res.status(500).send({ error: handleErrors(err) });
   }
 });
