@@ -2,6 +2,14 @@ const axios = require("axios");
 const url = require("url");
 
 module.exports = (app) => {
+<<<<<<< HEAD
+    // L'utilisateur demande les catégories de quizz
+    app.get("/api/games", function(req, res) {
+        console.log(req.cookies);
+        if (!req.cookies.jwt === undefined) {
+            return res.status(403).json({ error: { authentification: "Aucun token fourni" } });
+        }
+=======
   // L'utilisateur demande les catégories de quizz
   app.get("/api/games", function (req, res) {
     if (!req.cookies.jwt) {
@@ -12,6 +20,7 @@ module.exports = (app) => {
 
     const params = new url.URLSearchParams({ ...req.query });
     let url2 = `http://0.0.0.0:8081/quizz?${params}`;
+>>>>>>> 48392efff71eaf834a202fc735a6949c4547a430
 
     axios
       .post(url2, { token: req.cookies.jwt })
