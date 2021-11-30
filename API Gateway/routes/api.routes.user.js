@@ -1,87 +1,85 @@
 const axios = require("axios");
 
 module.exports = (app) => {
-  app.post("/api/users/register", function (req, res) {
-    axios({
-      method: "post",
-      url: `http://localhost:8080/users/register`,
-      data: req.body,
-    })
-      .then(function (reponse) {
-        // Cookie
-        let token = {
-          token: reponse.data.token,
-        };
+    app.post("/api/users/register", function(req, res) {
 
-        let expiresIn = 8000;
-        res.cookie("jwt", token, {
-          httpOnly: true,
+        if (!req.cookies.jwt) {
+            return res.status(403).json({ error: { authentification: "Aucun token fourni" } });
+        }
 
-          maxAge: expiresIn * 1000,
+        axios.post(`http://localhost:8080/users/register`, {...req.body, token: req.cookies.jwt })
+            .then(function(reponse) {
+                // Cookie
+                let token = {
+                    token: reponse.data.token,
+                };
 
-          sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+                let expiresIn = 8000;
+                res.cookie("jwt", token, {
+                    httpOnly: true,
 
-          secure: process.env.NODE_ENV === "production" ? true : false,
-        });
+                    maxAge: expiresIn * 1000,
 
-        res.status(200).send(reponse.data);
-      })
-      .catch(function (erreur) {
-        res.charset = "utf-8";
-        res.status(erreur.response.status ? erreur.response.status : 404).json({
-          error: erreur.response.data.error,
-        });
-      });
-  });
+                    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
 
-  app.post("/api/users/validate", function (req, res) {
-    axios({
-      method: "post",
-      url: `http://localhost:8080/users/validate`,
-      data: req.body,
-    })
-      .then(function (reponse) {
-        res.charset = "utf-8";
-        res.json("Token valide");
-      })
-      .catch(function (erreur) {
-        res.charset = "utf-8";
-        res.status(erreur.response.status ? erreur.response.status : 404).json({
-          error: erreur.response.data.error,
-        });
-      });
-  });
+                    secure: process.env.NODE_ENV === "production" ? true : false,
+                });
 
-  app.post("/api/users/login", function (req, res) {
-    axios({
-      method: "post",
-      url: `http://localhost:8080/users/login`,
-      data: req.body,
-    })
-      .then(function (reponse) {
-        // Cookie
-        let token = {
-          token: reponse.data.token,
-        };
-        let expiresIn = 8000;
-        res.cookie("jwt", token, {
-          httpOnly: true,
+                res.status(200).send(reponse.data);
+            })
+            .catch(function(erreur) {
+                res.status(erreur.response.status ? erreur.response.status : 404).json({
+                    error: erreur.response.data.error,
+                });
+            });
+    });
 
-          maxAge: expiresIn * 1000,
+    app.post("/api/users/validate", function(req, res) {
 
-          sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        if (!req.cookies.jwt) {
+            return res.status(403).json({ error: { authentification: "Aucun token fourni" } });
+        }
 
-          secure: process.env.NODE_ENV === "production" ? true : false,
-        });
+        axios.post(`http://localhost:8080/users/validate`, {...req.body, token: req.cookies.jwt })
+            .then(function(reponse) {
+                res.json(reponse);
+            })
+            .catch(function(erreur) {
+                res.status(erreur.response.status ? erreur.response.status : 404).json({
+                    error: erreur.response.data.error,
+                });
+            });
+    });
 
-        res.status(200).send(reponse.data);
-      })
-      .catch(function (erreur) {
-        res.charset = "utf-8";
+    app.post("/api/users/login", function(req, res) {
 
-        res.status(erreur.response.status ? erreur.response.status : 404).json({
-          error: erreur.response.data.error,
-        });
-      });
-  });
+        if (!req.cookies.jwt) {
+            return res.status(403).json({ error: { authentification: "Aucun token fourni" } });
+        }
+
+        axios.post(`http://localhost:8080/users/login`, {...req.body, token: req.cookies.jwt })
+            .then(function(reponse) {
+                // Cookie
+                let token = {
+                    token: reponse.data.token,
+                };
+                let expiresIn = 8000;
+                res.cookie("jwt", token, {
+                    httpOnly: true,
+
+                    maxAge: expiresIn * 1000,
+
+                    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+
+                    secure: process.env.NODE_ENV === "production" ? true : false,
+                });
+
+                res.status(200).send(reponse.data);
+            })
+            .catch(function(erreur) {
+                res.status(erreur.response.status ? erreur.response.status : 404).json({
+                    error: erreur.response.data.error,
+                });
+            });
+    });
 };
