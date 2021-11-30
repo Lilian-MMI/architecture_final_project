@@ -838,7 +838,6 @@ h1 {
   position: relative;
 }
 
-
 .difficulty-state-1 {
   background-color: #c8e6c9;
   color: #256029;
