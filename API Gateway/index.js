@@ -1,6 +1,6 @@
 const express = require("express");
-const morgan = require("morgan");// pour les log
-const cors = require("cors"); // Pour accèpter uniquement les Requêtes de telle URL
+const morgan = require("morgan");
+const cors = require("cors");
 const PORT_API = 3001;
 const amqp = require("amqplib/callback_api");
 
@@ -13,7 +13,7 @@ let corsOptions = {
 /* SETUP APP MIDDLEWARE */
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
 
@@ -27,10 +27,10 @@ require("./routes/api.routes.game")(app);
 require("./routes/api.routes.score")(app);
 
 // Si aucune route n'a été trouvée
-app.get('/.*/', function (req, res) {
+app.get('/.*/', function(req, res) {
 
     res.writeHead(404);
-    resend("Erreur 404 : URL " + req.url + " inconnue !")
+    res.end("Erreur 404 : URL " + req.url + " inconnue !")
 
 });
 

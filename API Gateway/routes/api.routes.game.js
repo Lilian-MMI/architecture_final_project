@@ -4,8 +4,8 @@ const url = require("url");
 module.exports = (app) => {
     // L'utilisateur demande les catégories de quizz
     app.get("/api/games", function(req, res) {
-
-        if (!req.cookies.jwt) {
+        console.log(req.cookies);
+        if (!req.cookies.jwt === undefined) {
             return res.status(403).json({ error: { authentification: "Aucun token fourni" } });
         }
 

@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 module.exports = (app) => {
+
     app.post("/api/users/register", function(req, res) {
 
         if (!req.cookies.jwt) {
