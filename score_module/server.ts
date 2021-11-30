@@ -19,5 +19,5 @@ sequelize.sync().catch((err) => {
 });
 
 app.listen(PORT, () => {
-  console.log("\x1b[33m%s\x1b[0m", `Server is running on port ${PORT} ✔`);
+  console.log("\x1b[33m%s\x1b[0m", `Server listen on port ${PORT} 🚀`);
 });

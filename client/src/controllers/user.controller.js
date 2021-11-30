@@ -8,4 +8,8 @@ export default {
   async register(user) {
     return await axiosApi.post("users/register", user);
   },
+
+  async checkToken() {
+    return await axiosApi.post("users/validate");
+  },
 };

@@ -16,7 +16,7 @@ const handleErrors = (err) => {
   return Object.keys(errors).length ? errors : err.message;
 };
 
-quizzRouter.get("/", verifyToken, async (req, res) => {
+quizzRouter.post("/", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await quizzServices.getAll(req.query));
   } catch (err) {
@@ -24,7 +24,7 @@ quizzRouter.get("/", verifyToken, async (req, res) => {
   }
 });
 
-quizzRouter.get("/:quizzId", verifyToken, async (req, res) => {
+quizzRouter.post("/:quizzId", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await quizzServices.getOne(req.params.quizzId));
   } catch (err) {

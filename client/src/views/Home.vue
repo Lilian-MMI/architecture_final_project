@@ -1,7 +1,7 @@
 <template>
   <Header />
   <router-view v-slot="{ Component }">
-    <transition name="slide">
+    <transition name="fade">
       <component :is="Component" />
     </transition>
   </router-view>
@@ -17,15 +17,13 @@ export default {
 </script>
 
 <style scoped>
-.scale-enter-active,
-.scale-leave-active {
-  transition: all 0.5s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
 }
 
-
-.scale-enter-from,
-.scale-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-  transform: scale(0.9);
 }
 </style>
