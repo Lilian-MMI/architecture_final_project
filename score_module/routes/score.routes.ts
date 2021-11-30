@@ -10,16 +10,21 @@ scoresRouter.post("/", verifyToken, async (req, res) => {
   try {
     res.status(200).send(await scoresService.addScore(req.body));
   } catch (error) {
-    console.log(error);
     res.status(400).send(error.message);
   }
 });
 
-scoresRouter.get("/:userId", verifyToken, async (req, res) => {
+scoresRouter.get("/", verifyToken, async (req, res) => {
   try {
-    res
-      .status(200)
-      .send(await scoresService.getScores(Number(req.params.userId)));
+    res.status(200).send(await scoresService.getScores(req["userId"]));
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+scoresRouter.get("/:scoreId", verifyToken, async (req, res) => {
+  try {
+    res.status(200).send(await scoresService.getScore(req.params.scoreId));
   } catch (error) {
     res.status(400).send(error.message);
   }

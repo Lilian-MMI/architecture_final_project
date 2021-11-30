@@ -61,6 +61,10 @@ body {
   color: #42b983;
 }
 
+a {
+  text-decoration: none;
+}
+
 .card {
   background: #fff;
   color: #043d75;

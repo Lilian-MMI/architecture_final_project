@@ -10,17 +10,13 @@
         <router-link to="/quizzs" class="header-nav-link"
           >Les quizz</router-link
         >
-        <router-link to="/account" class="header-nav-link"
-          >Mon compte</router-link
+        <router-link to="/scores" class="header-nav-link"
+          >Mes scores</router-link
         >
       </div>
     </div>
   </div>
 </template>
-
-<script>
-export default {};
-</script>
 
 <style scoped>
 .header {

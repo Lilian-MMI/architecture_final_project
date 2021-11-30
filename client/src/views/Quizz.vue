@@ -7,47 +7,66 @@
         </template>
       </Toolbar>
 
+      <Message severity="info" v-if="score"
+        >Quizz terminé ! Votre note est de {{ score }} !</Message
+      >
+
       <div class="question-wrapper" v-if="!isLoadingData">
-        <div class="card" v-for="question in questions" :key="question._id">
+        <div
+          class="card"
+          v-for="question in questions"
+          :key="question._id"
+          :class="{
+            incomplete: errors.find((error) => error === question._id),
+          }"
+        >
           <div class="card-header">
             <h3>{{ question.title }}</h3>
           </div>
           <div class="card-content">
             <div class="p-field-radiobutton" v-if="question.choice1">
               <RadioButton
-                :id="question.choice1"
+                :id="question._id + 'choice1'"
                 name="choice"
                 :value="question.choice1"
                 v-model="question.answer"
               />
-              <label :for="question.choice1">{{ question.choice1 }}</label>
+              <label :for="question._id + 'choice1'">{{
+                question.choice1
+              }}</label>
             </div>
             <div class="p-field-radiobutton" v-if="question.choice2">
               <RadioButton
-                :id="question.choice2"
+                :id="question._id + 'choice2'"
                 name="choice"
                 :value="question.choice2"
                 v-model="question.answer"
               />
-              <label :for="question.choice2">{{ question.choice2 }}</label>
+              <label :for="question._id + 'choice2'">{{
+                question.choice2
+              }}</label>
             </div>
             <div class="p-field-radiobutton" v-if="question.choice3">
               <RadioButton
-                :id="question.choice3"
+                :id="question._id + 'choice3'"
                 name="choice"
                 :value="question.choice3"
                 v-model="question.answer"
               />
-              <label :for="question.choice3">{{ question.choice3 }}</label>
+              <label :for="question._id + 'choice3'">{{
+                question.choice3
+              }}</label>
             </div>
             <div class="p-field-radiobutton" v-if="question.choice4">
               <RadioButton
-                :id="question.choice4"
+                :id="question._id + 'choice4'"
                 name="choice"
                 :value="question.choice4"
                 v-model="question.answer"
               />
-              <label :for="question.choice4">{{ question.choice4 }}</label>
+              <label :for="question._id + 'choice4'">{{
+                question.choice4
+              }}</label>
             </div>
           </div>
         </div>
@@ -81,15 +100,37 @@
           </div>
         </div>
       </div>
+
+      <div style="display: flex; justify-content: space-between">
+        <router-link to="/quizzs">
+          <Button
+            label="Revenir aux quizzs"
+            icon="pi pi-arrow-left"
+            class="p-button-text"
+          />
+        </router-link>
+        <Button
+          label="Soumettre"
+          @click="handleCheckAnswers"
+          :loading="isLoading"
+        />
+      </div>
     </div>
+
+    <Toast />
   </div>
 </template>
 
 <script>
+import gameController from "@/controllers/game.controller";
+import scoreController from "@/controllers/score.controller";
+
 export default {
   data() {
     return {
       isLoadingData: false,
+      isLoading: false,
+      score: null,
       questions: [
         {
           _id: "61a4d5bb1c89291b665d3d04",
@@ -270,10 +311,69 @@ export default {
           choice4: "Asp",
         },
       ],
+      errors: [],
     };
   },
 
-  methods: {},
+  methods: {
+    async handleCheckAnswers() {
+      this.isLoading = true;
+
+      this.errors = [];
+
+      this.questions.forEach((question) => {
+        if (!question.answer) {
+          this.errors.push(question._id);
+        }
+      });
+
+      if (this.errors.length) return (this.isLoading = false);
+
+      const userAnswers = this.questions.map((question) => {
+        return {
+          _id: question._id,
+          answer: question.answer,
+        };
+      });
+
+      await gameController
+        .checkAnswers({ id: this.$route.params.id, userAnswers })
+        .then(() => {
+          this.$router.push({ name: "scores" });
+        })
+        .catch(({ response }) => {
+          this.$toast.removeAllGroups();
+
+          Object.entries(response?.data?.error).forEach((key, value) => {
+            this.$toast.add({
+              severity: "error",
+              summary: "Réponse du server",
+              detail: `${key}: ${value}`,
+              life: 3000,
+            });
+          });
+        });
+
+      await scoreController
+        .getScore(this.$route.params.id)
+        .then(({ data }) => (this.score = data.grade))
+        .then(() => window.scrollTo(0, 0))
+        .catch(({ response }) => {
+          this.$toast.removeAllGroups();
+
+          Object.entries(response?.data?.error).forEach((key, value) => {
+            this.$toast.add({
+              severity: "error",
+              summary: "Réponse du server",
+              detail: `${key}: ${value}`,
+              life: 3000,
+            });
+          });
+        });
+
+      this.isLoading = false;
+    },
+  },
 };
 </script>
 
@@ -302,5 +402,10 @@ export default {
 
 .p-field-radiobutton > label {
   margin-left: 0.5rem;
+}
+
+.incomplete {
+  border: 1px solid red;
+  box-shadow: 0px 0px 12px rgba(238, 154, 154, 0.699);
 }
 </style>

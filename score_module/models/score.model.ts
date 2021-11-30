@@ -3,12 +3,12 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from ".";
 
 interface ScoreAttributes {
-  id?: number;
+  id?: string;
   grade: string;
   goodAnswers: string;
   badAnswers: string;
-  userId: number;
-  quizzId: number;
+  userId: string;
+  quizzId: string;
 }
 
 interface ScoreInputAttributes
@@ -32,11 +32,11 @@ const Score = sequelize.define<ScoreInstance>(
     },
     grade: {
       allowNull: false,
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
     },
     goodAnswers: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       get: function () {
         return JSON.parse(this.getDataValue("goodAnswers"));
       },
@@ -46,7 +46,7 @@ const Score = sequelize.define<ScoreInstance>(
     },
     badAnswers: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       get: function () {
         return JSON.parse(this.getDataValue("badAnswers"));
       },
@@ -56,11 +56,11 @@ const Score = sequelize.define<ScoreInstance>(
     },
     userId: {
       allowNull: false,
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.STRING,
     },
     quizzId: {
       allowNull: false,
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.STRING,
     },
   },
   {

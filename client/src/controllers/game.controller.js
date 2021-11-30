@@ -9,7 +9,7 @@ export default {
     return await axiosApi.get(`games/${gameId}`);
   },
 
-  async checkAnswers() {
-    return await axiosApi.post(`games/answer`);
+  async checkAnswers(answers) {
+    return await axiosApi.post(`games/answer`, answers);
   },
 };

@@ -15,6 +15,7 @@ import Toolbar from "primevue/toolbar";
 import Dropdown from "primevue/dropdown";
 import Skeleton from "primevue/skeleton";
 import RadioButton from "primevue/radiobutton";
+import Message from "primevue/message";
 
 createApp(App)
   .use(router)
@@ -27,4 +28,5 @@ createApp(App)
   .component("Dropdown", Dropdown)
   .component("Skeleton", Skeleton)
   .component("RadioButton", RadioButton)
+  .component("Message", Message)
   .mount("#app");
