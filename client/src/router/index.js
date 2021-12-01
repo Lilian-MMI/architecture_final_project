@@ -71,17 +71,21 @@ router.beforeEach(async (to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
 
   if (authRequired) {
-    await userController.checkToken().catch(() => {
-      next("/login");
-    });
+    const loggedIn = await userController.checkToken().catch(() => false);
 
-    next();
-  } else {
-    await userController.checkToken().catch(() => {
+    if (loggedIn) {
       next();
-    });
+    } else {
+      next("/login");
+    }
+  } else {
+    const loggedIn = await userController.checkToken().catch(() => false);
 
-    next("/quizzs");
+    if (!loggedIn) {
+      next();
+    } else {
+      next("/quizzs");
+    }
   }
 });
 

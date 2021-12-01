@@ -12,4 +12,8 @@ export default {
   async checkToken() {
     return await axiosApi.post("users/validate");
   },
+
+  async logout() {
+    return await axiosApi.get("users/logout");
+  },
 };
