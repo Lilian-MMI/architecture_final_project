@@ -1,5 +1,10 @@
 <template>
   <div class="wrapper-login">
+    <div v-if="errors.length">
+      <Message severity="error" v-for="error in errors" :key="error">{{
+        Object.values(error)[0]
+      }}</Message>
+    </div>
     <!-- FORM LOGIN -->
     <div class="card">
       <div class="card-header">
@@ -60,9 +65,6 @@
       <router-link to="/register" class="link">Inscrivez-vous</router-link>
     </div>
   </div>
-
-  <!-- RESPONSE SERVER -->
-  <Toast />
 </template>
 
 <script>
@@ -79,6 +81,7 @@ export default {
       isLoading: false,
       email: "",
       password: "",
+      errors: [],
     };
   },
   validations() {
@@ -86,6 +89,7 @@ export default {
   },
   methods: {
     async handleLogin() {
+      this.errors = [];
       /* CHECK VALIDATION ON FORM */
       const isFormCorrect = await this.v$.$validate();
       if (!isFormCorrect) return;
@@ -103,16 +107,7 @@ export default {
           this.$router.push({ name: "Home" });
         })
         .catch(({ response }) => {
-          this.$toast.removeAllGroups();
-
-          Object.entries(response?.data?.error).forEach((key, value) => {
-            this.$toast.add({
-              severity: "error",
-              summary: "Réponse du server",
-              detail: `${key}: ${value}`,
-              life: 3000,
-            });
-          });
+          this.errors.push(response.data.error);
         });
 
       this.isLoading = false;

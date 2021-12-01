@@ -1,6 +1,12 @@
 <template>
   <div class="scores">
     <div class="scores-container">
+      <div v-if="errors.length">
+        <Message severity="error" v-for="error in errors" :key="error">{{
+          Object.values(error)[0]
+        }}</Message>
+      </div>
+
       <Toolbar style="background: transparent">
         <template #start>
           <h1>Vos scores</h1>
@@ -52,15 +58,21 @@ export default {
     return {
       isLoadingData: false,
       scores: [],
+      errors: [],
     };
   },
 
   async created() {
     this.isLoadingData = true;
 
-    await scoreController.getScores().then((response) => {
-      this.scores = response.data;
-    });
+    await scoreController
+      .getScores()
+      .then((response) => {
+        this.scores = response.data;
+      })
+      .catch(({ response }) => {
+        this.errors.push(response.data.error);
+      });
 
     this.isLoadingData = false;
   },

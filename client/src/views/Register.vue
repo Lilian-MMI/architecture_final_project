@@ -1,5 +1,10 @@
 <template>
   <div class="wrapper-register">
+    <div v-if="errors.length">
+      <Message severity="error" v-for="error in errors" :key="error">{{
+        Object.values(error)[0]
+      }}</Message>
+    </div>
     <!-- FORM REGISTER -->
     <div class="card">
       <div class="card-header">
@@ -70,7 +75,7 @@
             </span>
             <InputText
               v-model="confirmPassword"
-              type="confirmPassword"
+              type="password"
               :class="{ 'p-invalid': v$.confirmPassword.$error }"
               placeholder="Confirmation mot de passe"
             />
@@ -100,9 +105,6 @@
       <router-link to="/login" class="link">Connectez-vous</router-link>
     </div>
   </div>
-
-  <!-- RESPONSE SERVER -->
-  <Toast />
 </template>
 
 <script>
@@ -121,6 +123,7 @@ export default {
       username: "",
       password: "",
       confirmPassword: "",
+      errors: [],
     };
   },
   validations() {
@@ -128,6 +131,7 @@ export default {
   },
   methods: {
     async handleRegister() {
+      this.errors = [];
       /* CHECK VALIDATION ON FORM */
       const isFormCorrect = await this.v$.$validate();
       if (!isFormCorrect) return;
@@ -145,14 +149,8 @@ export default {
         .then(() => {
           this.$router.push({ name: "Home" });
         })
-        .catch((error) => {
-          this.$toast.removeAllGroups();
-          this.$toast.add({
-            severity: "error",
-            summary: "Réponse du server",
-            detail: `${error.message}`,
-            life: 3000,
-          });
+        .catch(({ response }) => {
+          this.errors.push(response.data.error);
         });
 
       this.isLoading = false;

@@ -1,12 +1,18 @@
 <template>
   <div class="score">
     <div class="score-container">
+      <div v-if="errors.length">
+        <Message severity="error" v-for="error in errors" :key="error">{{
+          Object.values(error)[0]
+        }}</Message>
+      </div>
+
       <Toolbar style="background: transparent">
         <template #start>
           <h1>Score numéro {{ $route.params.id }}</h1>
         </template>
 
-        <template #end>
+        <template #end v-if="score">
           <p>Votre score est : {{ score.grade }}</p>
         </template>
       </Toolbar>
@@ -91,24 +97,30 @@ export default {
       isLoadingData: false,
       score: {},
       questions: [],
+      errors: [],
     };
   },
 
   async created() {
     this.isLoadingData = true;
 
-    await scoreController.getScore(this.$route.params.id).then((response) => {
-      this.score = response.data;
-    });
+    await scoreController
+      .getScore(this.$route.params.id)
+      .then((response) => {
+        this.score = response.data;
+      })
+      .catch(({ response }) => {
+        this.errors.push(response.data.error);
+      });
 
     await gameController
       .getQuizz(this.score.quizzId, { withReponse: 1 })
       .then((response) => {
         this.questions = response.data.questions;
+      })
+      .catch(({ response }) => {
+        this.errors.push(response.data.error);
       });
-
-    console.log(this.score);
-    console.log(this.questions);
 
     this.isLoadingData = false;
   },

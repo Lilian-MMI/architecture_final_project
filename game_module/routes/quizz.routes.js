@@ -13,7 +13,7 @@ const handleErrors = (err) => {
     });
   }
 
-  return Object.keys(errors).length ? errors : err.message;
+  return Object.keys(errors).length ? errors : { errors: err.message };
 };
 
 quizzRouter.post("/", verifyToken, async (req, res) => {

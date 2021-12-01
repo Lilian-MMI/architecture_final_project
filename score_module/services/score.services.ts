@@ -21,7 +21,10 @@ export class ScoresService {
     return await this.scoreDAO.getScores(userId);
   }
 
-  public async getScore(id: ScoreAttributes["id"]): Promise<ScoreAttributes> {
-    return await this.scoreDAO.getScore(id);
+  public async getScore(
+    id: ScoreAttributes["id"],
+    userId: ScoreAttributes["userId"]
+  ): Promise<ScoreAttributes> {
+    return await this.scoreDAO.getScore(id, userId);
   }
 }

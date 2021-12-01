@@ -1,6 +1,12 @@
 <template>
   <div class="quizzs">
     <div class="quizzs-container">
+      <div v-if="errors.length">
+        <Message severity="error" v-for="error in errors" :key="error">{{
+          Object.values(error)[0]
+        }}</Message>
+      </div>
+
       <Toolbar style="background: transparent">
         <template #start>
           <h1>Liste des quizz</h1>
@@ -97,6 +103,7 @@ export default {
       selectedDifficulty: null,
       isLoading: false,
       quizzs: [],
+      errors: [],
     };
   },
 
@@ -106,9 +113,14 @@ export default {
     /* DEBOUNCE INPUT FILTER */
     this.getQuizzsWithSearch = debounce(this.getQuizzsWithSearch, 1000);
 
-    await gameController.getQuizzs().then((response) => {
-      this.quizzs = response.data.quizz;
-    });
+    await gameController
+      .getQuizzs()
+      .then((response) => {
+        this.quizzs = response.data.quizz;
+      })
+      .catch(({ response }) => {
+        this.errors.push(response.data.error);
+      });
 
     this.isLoadingData = false;
   },
@@ -125,9 +137,14 @@ export default {
         params["label"] = search;
       }
 
-      await gameController.getQuizzs(params).then((response) => {
-        this.quizzs = response.data.quizz;
-      });
+      await gameController
+        .getQuizzs(params)
+        .then((response) => {
+          this.quizzs = response.data.quizz;
+        })
+        .catch(({ response }) => {
+          this.errors.push(response.data.error);
+        });
 
       this.isLoadingData = false;
     },

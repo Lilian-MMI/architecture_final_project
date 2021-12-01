@@ -1,6 +1,12 @@
 <template>
   <div class="quizz">
     <div class="quizz-container">
+      <div v-if="errorsApi.length">
+        <Message severity="error" v-for="error in errorsApi" :key="error">{{
+          Object.values(error)[0]
+        }}</Message>
+      </div>
+
       <Toolbar style="background: transparent">
         <template #start>
           <h1>Quizz numéro {{ $route.params.id }}</h1>
@@ -110,14 +116,13 @@
           />
         </router-link>
         <Button
+          v-if="questions.length"
           label="Soumettre"
           @click="handleCheckAnswers"
           :loading="isLoading"
         />
       </div>
     </div>
-
-    <Toast />
   </div>
 </template>
 
@@ -133,15 +138,21 @@ export default {
       score: null,
       questions: [],
       errors: [],
+      errorsApi: [],
     };
   },
 
   async created() {
     this.isLoadingData = true;
 
-    await gameController.getQuizz(this.$route.params.id).then((response) => {
-      this.questions = response.data.questions;
-    });
+    await gameController
+      .getQuizz(this.$route.params.id)
+      .then((response) => {
+        this.questions = response.data.questions;
+      })
+      .catch(({ response }) => {
+        this.errorsApi.push(response.data.error);
+      });
 
     this.isLoadingData = false;
   },
@@ -151,6 +162,7 @@ export default {
       this.isLoading = true;
 
       this.errors = [];
+      this.errorsApi = [];
 
       this.questions.forEach((question) => {
         if (!question.answer) {
@@ -171,17 +183,7 @@ export default {
         .checkAnswers({ id: this.$route.params.id, userAnswers })
         .then((response) => response.data.scoreId)
         .catch(({ response }) => {
-          if (!response.data.error) return;
-          this.$toast.removeAllGroups();
-
-          Object.entries(response.data.error).forEach((key, value) => {
-            this.$toast.add({
-              severity: "error",
-              summary: "Réponse du server",
-              detail: `${key}: ${value}`,
-              life: 3000,
-            });
-          });
+          this.errorsApi.push(response.data.error);
         });
 
       await scoreController
@@ -189,17 +191,7 @@ export default {
         .then(({ data }) => (this.score = data.grade))
         .then(() => window.scrollTo(0, 0))
         .catch(({ response }) => {
-          if (!response.data.error) return;
-          this.$toast.removeAllGroups();
-
-          Object.entries(response?.data?.error).forEach((key, value) => {
-            this.$toast.add({
-              severity: "error",
-              summary: "Réponse du server",
-              detail: `${key}: ${value}`,
-              life: 3000,
-            });
-          });
+          this.errorsApi.push(response.data.error);
         });
 
       this.isLoading = false;

@@ -24,7 +24,9 @@ scoresRouter.post("/history", verifyToken, async (req, res) => {
 
 scoresRouter.post("/:scoreId", verifyToken, async (req, res) => {
   try {
-    res.status(200).send(await scoresService.getScore(req.params.scoreId));
+    res
+      .status(200)
+      .send(await scoresService.getScore(req.params.scoreId, req["userId"]));
   } catch (error) {
     res.status(400).send(error.message);
   }

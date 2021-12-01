@@ -16,8 +16,9 @@ export class ScoreDAO {
   }
 
   public async getScore(
-    id: ScoreInputAttributes["id"]
+    id: ScoreInputAttributes["id"],
+    userId: ScoreInputAttributes["userId"]
   ): Promise<ScoreAttributes> {
-    return await Score.findByPk(id);
+    return await Score.findOne({ where: { id, userId } });
   }
 }
