@@ -2,16 +2,25 @@ const express = require("express");
 const mongoose = require("mongoose");
 const usersRouter = require("./routes/user.routes");
 const morgan = require("morgan");
+const cors = require("cors");
 
 // Constants
 const PORT = 8080;
-const HOST = "0.0.0.0";
+const corsOptions = {
+  origin: [
+    "http://0.0.0.0:8081",
+    "http://0.0.0.0:8082",
+    "http://localhost:3001",
+  ],
+  credentials: true,
+};
 
 // App
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/users", usersRouter);
+app.use(cors(corsOptions));
 
 const dbURI =
   process.env.DB_URI ||

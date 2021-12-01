@@ -4,17 +4,25 @@ const quizzRouter = require("./routes/quizz.routes");
 const morgan = require("morgan");
 const Fixtures = require("node-mongodb-fixtures");
 const fixtures = new Fixtures({ dir: "./fixtures", mute: false });
+const cors = require("cors");
 
 // Constants
 const PORT = 8081;
-const HOST = "0.0.0.0";
+const corsOptions = {
+  origin: [
+    "http://0.0.0.0:8080",
+    "http://0.0.0.0:8082",
+    "http://localhost:3001",
+  ],
+  credentials: true,
+};
 
 // App
 const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
-
 app.use("/quizz", quizzRouter);
+app.use(cors(corsOptions));
 
 const dbURI =
   process.env.DB_URI ||
