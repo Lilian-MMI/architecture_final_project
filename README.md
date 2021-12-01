@@ -18,8 +18,6 @@ Les principales fonctionnalités sont les suivantes :
 
 ## Procédure d'installations des différents modules
 
-<br>
-
 ### Microservices
 
 L'application est composé de 3 microservices. Les microservices sont : user, game, et score. Ils tournent respectivement sur les ports 8080, 8081, 8082. Ces ports sont
@@ -30,8 +28,6 @@ Comme préciser précedemment, ces microservices sont containerizer via Docker, 
 ```
 $ docker-compose up
 ```
-
-<br>
 
 ### API Gateway
 
@@ -44,8 +40,6 @@ $ npm i
 $ node
 ```
 
-<br>
-
 ### Client / interface
 
 Le client, en communication directe avec l'API gateway utilise le framework front-end VueJs. De plus, pour faciliter son développement nous avons utiliser le framework PrimeVue offrant un ensemble de composants et d'outils.
@@ -56,8 +50,6 @@ Le client quant à lui tourne sur le port 3000 et se lance en executant la suite
 $ npm i
 $ npm run serve
 ```
-
-<br>
 
 ## Pré-requis
 
@@ -81,3 +73,9 @@ L'ensemble des données ont été lu et filtrer pour convenir au mieux à notre 
 Les fichiers créés à la suite de ce script ont permis de créer un ensemble de fixtures (de quizzs et de questions) afin de peupler notre projet de données de jeu. 
 
 Nous avons au total 2494 quizz et 49716 questions. Chaque quizz comporte au maximum 20 questions. 
+
+<br>
+
+## Dépot SCM
+
+Le projet est disponible à l'adresse URL suivante : https://github.com/Lilian-MMI/architecture_final_project
