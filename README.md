@@ -17,7 +17,7 @@ node
 
 Ce serveur est lancé sur le port 3001.
 
-Le client quant à lui se lance en executant la suite de commandes suivantes:
+Le client quant à lui se lance en executant la suite de commandes suivantes, sur le port 3000 :
 
 ```
 npm i
