@@ -37,7 +37,7 @@ Cette API, tourne sous un server NodeJs (+ framework expressJs) sur le port 3001
 
 ```
 $ npm i 
-$ node
+$ node index
 ```
 
 ### Client / interface
